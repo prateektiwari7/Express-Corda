@@ -1,6 +1,13 @@
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
+
+
+repositories {
+    maven { url 'http://bluebank-nexus.uksouth.cloudapp.azure.com/repository/maven-public/'}
+}
+
+
 cordapp {
     targetPlatformVersion corda_platform_version
     minimumPlatformVersion corda_platform_version
@@ -55,9 +62,21 @@ dependencies {
     //Account dependencies
     cordaCompile "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
     cordaCompile "$accounts_release_group:accounts-workflows:$accounts_release_version"
+    
+    
+    //Server
+    compile("io.bluebank.braid:braid-corda:4.1.1-patch-01") {
+        exclude group: 'javax.validation', module: 'validation-api'
+    }
+    
+    
 }
 
 task integrationTest(type: Test, dependsOn: []) {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
