@@ -41,23 +41,24 @@ class BraidService(val serviceHub: ServiceHub) {
 
 }
 
+
+
+
+
+
+
 @InitiatingFlow
 @StartableByService
-class WhoAmIFlow : FlowLogic<String>() {
+class WhoAmIFlow(val acctName: String) : FlowLogic<String>() {
     @Suspendable
     override fun call() : String {
-        return ourIdentity.name.organisation
-    }
-}
 
-@InitiatingFlow
-@StartableByService
-class CreateAccount(val acctName: String) : FlowLogic<String>() {
-
-    @Suspendable
-    override fun call(): String {
+//        val acctName: String
+//
+//        acctName = "PrateekTiwari"
 
         val newAccount = accountService.createAccount(name = acctName).toCompletableFuture().getOrThrow()
+
         val acct = newAccount.state.data
 
         val party = serviceHub.myInfo.identityFromX500Name(ourIdentity.name)
@@ -66,8 +67,22 @@ class CreateAccount(val acctName: String) : FlowLogic<String>() {
 
         return ""+acct.name + " team's account was created. UUID is : " + acct.identifier+ "Private Key of your account as"+key
 
-    }
 
+
+    }
 }
+
+//@InitiatingFlow
+//@StartableByService
+//class CreateAccount : FlowLogic<String>() {
+//
+//    @Suspendable
+//    override fun call(): String {
+//
+//
+//
+//    }
+//
+//}
 
 

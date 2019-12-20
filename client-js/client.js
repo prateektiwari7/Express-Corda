@@ -25,19 +25,21 @@ function onError(err) { console.error(err); process.exit(); }
 
 // Uses Braid to call the WhoAmI flow on the node, and handles the response
 // using callbacks.
-app.get('/whoami-flow-callback', (req, res) => {
-    braid.flows.whoAmIFlow(
-        result => res.send("Hey, you're speaking to " + result + "!"),
-        err => res.status(500).send(err));
-});
+//app.get('/whoami-flow-callback', (req, res) => {
+//    braid.flows.whoAmIFlow(
+//        result => res.send("Hey, you're speaking to " + result + "!"),
+//        err => res.status(500).send(err));
+//});
+//
+//
+//// Uses Braid to call the WhoAmI flow on the node, and handles the response
+//// using promises.
+//app.get('/whoami-flow-promise', (req, res) => {
+//    braid.flows.whoAmIFlow()
+//    .then(result => res.send("Hey, you're speaking to " + result + "!"))
+//    .catch(err => res.status(500).send(err));
+//});
 
-// Uses Braid to call the WhoAmI flow on the node, and handles the response
-// using promises.
-app.get('/whoami-flow-promise', (req, res) => {
-    braid.flows.whoAmIFlow()
-    .then(result => res.send("Hey, you're speaking to " + result + "!"))
-    .catch(err => res.status(500).send(err));
-});
 
 // Uses Braid to call the BraidService on the node, and handles the response
 // using callbacks.
@@ -47,21 +49,21 @@ app.get('/whoami-service', (req, res) => {
         err => res.status(500).send(err));
 });
 
-app.post('/CreateAccount',urlencodedParser,function(request,response){
+app.post('/CreateAccountMethod',urlencodedParser,function(request,response){
 
 /*   response = {
        first_name:request.body.name
    };
+              result => response.send("Hey, you're speaking to " + query1 + "!"),
+              err => response.status(500).send(err)
    console.log(response);*/
 
     var query1=request.body.name;
    console.log("$$$$$$$$$$$$$"+query1);
-   braid.flows.CreateAccount(
-   result => res.send(query1), err => res.status(500).send(err))
-
-
-
-});
+     braid.flows.whoAmIFlow(query1)
+          .then(result => response.send("Hey, you're speaking to " + result + "!"))
+         .catch(err => response.status(500).send(err));
+   });
 
 
 
